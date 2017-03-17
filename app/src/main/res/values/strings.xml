@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Signature</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello">Hello World, CaptureSignatureActivity!</string>
+    <string name="external_dir">signatureexample</string>
+    <string name="title_activity_signatures_saved">SignaturesSavedActivity</string>
+</resources>
