@@ -29,9 +29,9 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity implements Signature.SignatureListener {
 
     public static final String MEDIA_DIRECTORY = "signature/signatures";
-    LinearLayout mContent;
-    Signature mSignature;
-    Button mSaveSignature;
+    private LinearLayout mContent;
+    private Signature mSignature;
+    private Button mSaveSignature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

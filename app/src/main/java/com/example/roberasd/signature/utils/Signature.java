@@ -27,10 +27,9 @@ public class Signature extends View {
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
     private final RectF dirtyRect = new RectF();
     private Paint paint = new Paint();
-    private Path path = new Path();
+    private Path mPath = new Path();
     private float lastTouchX;
     private float lastTouchY;
-    private Context mContext;
     private SignatureListener mListener;
 
     public Signature(Context context, SignatureListener listener) {
@@ -40,7 +39,6 @@ public class Signature extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
-        mContext = context;
         mListener = listener;
     }
 
@@ -52,6 +50,7 @@ public class Signature extends View {
         File path = new File(signaturePath);
 
         Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.RGB_565);
+
         Canvas canvas = new Canvas(bitmap);
 
         try {
@@ -69,13 +68,13 @@ public class Signature extends View {
     }
 
     public void clear() {
-        path.reset();
+        mPath.reset();
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawPath(path, paint);
+        canvas.drawPath(mPath, paint);
     }
 
     @Override
@@ -86,7 +85,7 @@ public class Signature extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                path.moveTo(eventX, eventY);
+                mPath.moveTo(eventX, eventY);
                 lastTouchX = eventX;
                 lastTouchY = eventY;
                 break;
@@ -101,13 +100,9 @@ public class Signature extends View {
                     float historicalX = event.getHistoricalX(i);
                     float historicalY = event.getHistoricalY(i);
                     expandDirtyRect(historicalX, historicalY);
-                    path.lineTo(historicalX, historicalY);
+                    mPath.lineTo(historicalX, historicalY);
                 }
-                path.lineTo(eventX, eventY);
-                break;
-
-            default:
-                debug("Ignored touch event: " + event.toString());
+                mPath.lineTo(eventX, eventY);
                 break;
         }
 
@@ -120,9 +115,6 @@ public class Signature extends View {
         lastTouchY = eventY;
 
         return true;
-    }
-
-    private void debug(String string) {
     }
 
     private void expandDirtyRect(float historicalX, float historicalY) {
